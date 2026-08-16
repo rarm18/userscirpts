@@ -12,7 +12,7 @@
 // ==/UserScript==
 
 /* Converted from Stylus "S1 NUX" (stage1st) to a Userscripts .user.css.
-   Original style thread: https://stage1st.com/2b/thread-1826103-1-1.html
+   Original: https://userstyles.world/style/...  (see @supportURL in source)
    Stylus @var options are baked in with their defaults:
    autotheme=1, lighttheme=tea, darktheme=tea, topicfont=initial,
    signature_autohide=1, userinfo=autohide1, width=960px, thinscroll=1 ... */
@@ -77,28 +77,27 @@ shdl(shadow-light)：浅阴影色；
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --darktheme: 0;
-    --bg: #ecedeb;
-    --pri: #d1d9c1;
-    --prid: #cc9;
-    --pril: #e5e9df;
-    --bn: #0b7ac9;
-    --bnd: #0555ba;
-    --sec: #0095ff;
-    --secp: #00acff;
-    --t: #022C80;
-    --tl: #3159a9;
-    --tg: #314672;
-    --tp: #889dc8;
-    --pt: #063288;
-    --ptl: #1041a3;
-    --icl: #fff;
-    --ic: #ccc;
-    --icd: #999;
-    --icdd: #555;
-    --icddd: #000;
-    --shd: #555;
-    --shdl: #999;
+    --darktheme: 1;
+    --bg: #262626;
+    --pri: #263238;
+    --prid: #2c3f44;
+    --pril: #1f2426;
+    --bn: #30383e;
+    --bnd: #2c3135;
+    --sec: #F26C4F;
+    --secp: #F27C5F;
+    --t: #b4b5af;
+    --tl: #cfd0cb;
+    --tg: #7a7b74;
+    --pt: #b6b9b1;
+    --ptl: #cfd6c7;
+    --icl: #000;
+    --ic: #333;
+    --icd: #666;
+    --icdd: #ccc;
+    --icddd: #fff;
+    --shd: #000;
+    --shdl: #161616;
     --bgb: hsl(from var(--bg) h s l / 70%);
     --prib: hsl(from var(--pri) h s l / 70%);
     --pridb: hsl(from var(--prid) h s l / 70%);
