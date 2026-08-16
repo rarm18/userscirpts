@@ -1,0 +1,539 @@
+// ==UserScript==
+// @name         NGA Dark Mode (NGA 暗黑模式)
+// @description  bbs.nga.cn 全站暗黑模式 + 紧凑排版：隐藏顶部大横幅、压缩菜单与楼层间距、隐藏签名与经验条、加宽内容栏减少屏幕占用。
+// @namespace    zywu
+// @author       zywu
+// @license      MIT
+// @version      1.0.0
+// @match        *://bbs.nga.cn/*
+// @match        *://nga.178.com/*
+// @match        *://bbs.ngabbs.com/*
+// @inject-into  auto
+// @noframes
+// ==/UserScript==
+
+/* ============================================================================
+   NGA 暗黑模式 + 紧凑排版
+   覆盖页面：帖子列表 (thread.php) / 帖子正文 (read.php) / 搜索 / 板块 / 个人中心
+   配色：GitHub-Dark 系；排版：减少纵向空白、隐藏纯装饰元素、加宽内容列。
+   ============================================================================ */
+
+:root {
+    color-scheme: dark;
+    --nga-bg: #0c1117;        /* 页面背景 */
+    --nga-surface: #141b22;   /* 次级背景（菜单/表头） */
+    --nga-surface-2: #1b2430; /* 卡片/输入框 */
+    --nga-hover: #2e363d;     /* 悬停 */
+    --nga-border: #21262d;    /* 边框 */
+    --nga-text: #e6edf3;      /* 正文 */
+    --nga-muted: #7d8590;     /* 次要文字 */
+    --nga-link: #2f81f7;      /* 链接 */
+    --nga-red: #e5534b;       /* 强调（回帖数/红字） */
+    --nga-yellow: #e2a63c;    /* 高亮 */
+}
+
+/* ---------------- 基础 ---------------- */
+
+html,
+body {
+    background: var(--nga-bg) !important;
+    color: var(--nga-text) !important;
+    color-scheme: dark !important;
+}
+
+/* NGA 桌面端默认 min-width 较大，放开以适配窄窗/缩放 */
+body {
+    min-width: 0 !important;
+}
+
+a {
+    color: var(--nga-link) !important;
+}
+
+a:hover {
+    color: #79b8ff !important;
+}
+
+/* 图标随主题 */
+svg,
+svg path {
+    fill: var(--nga-text) !important;
+}
+
+img {
+    outline: 0 !important;
+}
+
+/* ---------------- 顶部横幅 / 主菜单 ---------------- */
+
+/* 顶部自定义大横幅：纯装饰，占大量纵向空间，隐藏 */
+#custombg {
+    display: none !important;
+}
+
+/* 主菜单压缩 */
+#mainmenu {
+    padding: 4px 12px !important;
+    background: var(--nga-surface) !important;
+    border-bottom: 1px solid var(--nga-border) !important;
+    box-shadow: none !important;
+}
+
+#mainmenu .mmdefault.cell {
+    padding: 0 !important;
+}
+
+#mainmenu .stdbtn a,
+#mainmenu .innerbg {
+    background: transparent !important;
+    color: var(--nga-text) !important;
+    padding: 4px 8px !important;
+}
+
+#mainmenu input,
+#mainmenu .mmdefault.cell input {
+    background: var(--nga-surface-2) !important;
+    border-color: var(--nga-border) !important;
+    color: var(--nga-text) !important;
+}
+
+#usernamebg {
+    background: var(--nga-surface) !important;
+}
+
+/* 导航（面包屑/板块链接） */
+#m_nav,
+#b_nav,
+.nav_root,
+.nav_root_c,
+.nav_link,
+.nav_spr {
+    background: var(--nga-surface) !important;
+    border-color: var(--nga-border) !important;
+    color: var(--nga-text) !important;
+}
+
+/* ---------------- 内容宽度：加宽、居中、减少两侧留白 ---------------- */
+
+#mc,
+#m_posts,
+#m_threads,
+#toptopics,
+#topicrows,
+.forumbox,
+.catenew,
+.contentBlock {
+    width: 100% !important;
+    max-width: 1600px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.forumbox,
+#m_posts table,
+#m_threads table {
+    width: 100% !important;
+    border-spacing: 0 !important;
+}
+
+/* ---------------- 帖子列表页 (thread.php) ---------------- */
+
+#m_threads {
+    background: var(--nga-bg) !important;
+    border-color: var(--nga-border) !important;
+}
+
+#m_threads th {
+    background: var(--nga-surface) !important;
+    color: var(--nga-muted) !important;
+    border-color: var(--nga-border) !important;
+    padding: 5px 8px !important;
+}
+
+#m_threads td {
+    background: var(--nga-surface) !important;
+    border-color: var(--nga-border) !important;
+    padding: 6px 8px !important;
+}
+
+#m_threads tr:hover td,
+#m_threads .topicrow:hover td {
+    background: var(--nga-hover) !important;
+}
+
+#m_threads .topicrow td {
+    background: var(--nga-surface) !important;
+}
+
+#m_threads .replyer,
+#m_threads .replyer > b {
+    color: var(--nga-muted) !important;
+}
+
+#toppedtopic table,
+#toppedtopic td {
+    background: var(--nga-surface-2) !important;
+    border-color: var(--nga-border) !important;
+}
+
+/* ---------------- 帖子正文页 (read.php) ---------------- */
+
+/* 顶部工具栏行压缩 */
+#m_pbtntop,
+#m_fopts,
+.postBtnPos,
+.postbtnsc {
+    padding: 3px 6px !important;
+    background: var(--nga-bg) !important;
+    border-color: var(--nga-border) !important;
+}
+
+/* 话题标题区 */
+.topicrow {
+    background: var(--nga-surface) !important;
+    border-color: var(--nga-border) !important;
+    padding: 6px 10px !important;
+}
+
+.topicrow .c2 > span:first-child {
+    color: var(--nga-text) !important;
+}
+
+.topicrow .c3 > div:first-child,
+.topicrow .c4 > div:first-child {
+    background: var(--nga-surface) !important;
+}
+
+/* 楼层卡片：压缩间距 */
+#m_posts {
+    background: var(--nga-bg) !important;
+    border-color: var(--nga-border) !important;
+    box-shadow: none !important;
+}
+
+.forumbox {
+    background: var(--nga-surface) !important;
+    border-color: var(--nga-border) !important;
+    box-shadow: none !important;
+}
+
+.forumbox.postbox {
+    margin-bottom: 5px !important;
+    border-bottom: 1px solid var(--nga-border) !important;
+}
+
+.forumbox .postrow td:not(.c0),
+.forumbox td {
+    border-color: var(--nga-border) !important;
+    padding: 7px 10px !important;
+}
+
+/* 用户栏：收窄，紧凑 */
+.forumbox .postrow .c1 {
+    width: 13% !important;
+    min-width: 120px !important;
+    background: var(--nga-surface) !important;
+}
+
+.row1 .c1, .row1 .c2, .row1 .c3, .row1 .c4 {
+    background: var(--nga-surface) !important;
+}
+
+.row2 .c1, .row2 .c2, .row2 .c3, .row2 .c4 {
+    background: var(--nga-bg) !important;
+}
+
+.forumbox .postrow .stat {
+    border: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* 经验条：占空间，隐藏 */
+.r_container,
+.r_bar {
+    display: none !important;
+}
+
+/* 楼层/点赞/改动标记颜色 */
+#m_posts .block_txt_c0 {
+    color: var(--nga-muted) !important;
+    background: transparent !important;
+}
+
+#m_posts .block_txt_c2,
+.block_txt_c3 {
+    color: var(--nga-muted) !important;
+}
+
+.block_txt {
+    background: transparent !important;
+    color: var(--nga-text) !important;
+    padding: 0 !important;
+}
+
+/* 昵称 */
+.block_txt_c0 .iconfont {
+    color: var(--nga-muted) !important;
+}
+
+/* 正文 */
+.postcontent {
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+    color: var(--nga-text) !important;
+    word-break: break-word;
+}
+
+.postcontent a {
+    color: var(--nga-link) !important;
+}
+
+/* 发帖信息行压缩 */
+.posterInfoLine {
+    background: var(--nga-surface) !important;
+    border-color: var(--nga-border) !important;
+    font-size: 12px !important;
+    color: var(--nga-muted) !important;
+    padding: 2px 0 !important;
+}
+
+.postrow .posterInfoLine .usercol,
+.postrow .userval,
+.postrow .postinfot {
+    color: var(--nga-muted) !important;
+}
+
+/* 签名：占空间，隐藏 */
+.sigline,
+[id^="postsign"] {
+    display: none !important;
+}
+
+/* 引用块 */
+.quote {
+    background: var(--nga-surface-2) !important;
+    border: 1px solid var(--nga-border) !important;
+    color: var(--nga-text) !important;
+    padding: 6px 10px !important;
+    margin: 4px 0 !important;
+}
+
+/* 折叠内容 */
+.collapse_btn,
+.collapse_content {
+    background: var(--nga-surface-2) !important;
+    border: 1px solid var(--nga-border) !important;
+    color: var(--nga-text) !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+}
+
+/* 贴条 */
+.comment_c_1,
+.comment_c_2 {
+    background: var(--nga-surface-2) !important;
+    border: 1px solid var(--nga-border) !important;
+    color: var(--nga-text) !important;
+}
+
+.apd {
+    color: var(--nga-border) !important;
+}
+
+/* ---------------- 按钮 / 翻页 ---------------- */
+
+.stdbtn {
+    background: var(--nga-surface) !important;
+    border: 1px solid var(--nga-border) !important;
+    box-shadow: none !important;
+}
+
+.stdbtn a {
+    background: var(--nga-surface) !important;
+    color: var(--nga-text) !important;
+    border-color: transparent !important;
+}
+
+.stdbtn a:hover {
+    background: var(--nga-hover) !important;
+    color: var(--nga-link) !important;
+}
+
+.innerbg {
+    background: var(--nga-surface) !important;
+}
+
+.block_txt_big {
+    background: var(--nga-surface) !important;
+    color: var(--nga-text) !important;
+    border: 1px solid var(--nga-border) !important;
+    line-height: 1.6em !important;
+    margin: 0.1em !important;
+    padding: 0 0.6em !important;
+    height: 2em !important;
+    font-size: 12px !important;
+}
+
+.small_colored_text_btn,
+.colored_text_btn {
+    background: var(--nga-surface) !important;
+    color: var(--nga-text) !important;
+    border-color: var(--nga-border) !important;
+}
+
+.colored_text_btn:hover,
+.small_colored_text_btn:hover {
+    background: var(--nga-hover) !important;
+}
+
+.cell.rep {
+    color: var(--nga-link) !important;
+}
+
+button {
+    background: var(--nga-surface-2) !important;
+    color: var(--nga-text) !important;
+    border: 1px solid var(--nga-border) !important;
+}
+
+button:hover {
+    background: var(--nga-hover) !important;
+}
+
+/* ---------------- 板块 / 搜索页 ---------------- */
+
+.cateblock,
+.catenew,
+.catenew .b2,
+.catenew .b3,
+.catenew h2,
+.catenew div {
+    background: var(--nga-surface) !important;
+    border-color: var(--nga-border) !important;
+    color: var(--nga-text) !important;
+}
+
+.catetitle {
+    color: var(--nga-text) !important;
+}
+
+#sub_forums,
+.contentBlock {
+    background: var(--nga-surface) !important;
+    border-color: var(--nga-border) !important;
+}
+
+#toptopics .contentBlock {
+    background: var(--nga-surface) !important;
+    border-color: var(--nga-border) !important;
+}
+
+.urltip.nobr {
+    color: var(--nga-muted) !important;
+}
+
+/* ---------------- 表单 ---------------- */
+
+textarea,
+select,
+input,
+input[type="text"],
+input:not([type]) {
+    background: var(--nga-surface-2) !important;
+    border: 1px solid var(--nga-border) !important;
+    color: var(--nga-text) !important;
+}
+
+textarea:focus,
+input:focus {
+    border-color: var(--nga-link) !important;
+    box-shadow: 0 0 0 1px var(--nga-link) inset !important;
+}
+
+/* ---------------- 弹层 / 悬浮框 ---------------- */
+
+.single_ttip2 {
+    background: var(--nga-surface-2) !important;
+    border: 1px solid var(--nga-border) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+    border-radius: 8px !important;
+}
+
+.single_ttip2 .tip_title,
+.single_ttip2 .div2 {
+    background: var(--nga-surface-2) !important;
+    border-color: var(--nga-border) !important;
+    color: var(--nga-text) !important;
+}
+
+.single_ttip2 .div2 .div3 .ltxt .group {
+    border-color: var(--nga-border) !important;
+}
+
+/* ---------------- 其他 ---------------- */
+
+#startmenu .recent,
+#startmenu .item > a {
+    background: var(--nga-surface) !important;
+    color: var(--nga-text) !important;
+}
+
+#footer,
+#msg_block_c,
+#msg_block_c .subblock,
+#msg_block_c .menu a,
+#msg_block_c .pager a {
+    background: var(--nga-bg) !important;
+    border-color: var(--nga-border) !important;
+    color: var(--nga-muted) !important;
+}
+
+.invert {
+    background: var(--nga-surface-2) !important;
+    color: var(--nga-text) !important;
+}
+
+/* 表格通用边框 */
+table,
+table td,
+table th {
+    border-color: var(--nga-border) !important;
+}
+
+/* 表情：轻微提亮适配暗底 */
+.smile_ac {
+    filter: brightness(0.92) !important;
+}
+
+/* ---------------- 滚动条 ---------------- */
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--nga-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--nga-surface-2);
+    border-radius: 6px;
+    border: 2px solid var(--nga-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--nga-hover);
+}
+
+/* ---------------- 宽屏适配 ---------------- */
+
+@media (min-width: 1800px) {
+    #mc,
+    #m_posts,
+    #m_threads,
+    .forumbox,
+    .catenew {
+        max-width: 1700px !important;
+    }
+}
