@@ -4,7 +4,7 @@
 // @namespace    zywu
 // @author       zywu
 // @license      MIT
-// @version      1.0.0
+// @version      1.0.1
 // @match        *://bbs.nga.cn/*
 // @match        *://nga.178.com/*
 // @match        *://bbs.ngabbs.com/*
@@ -169,6 +169,23 @@ img {
 #m_threads .replyer,
 #m_threads .replyer > b {
     color: var(--nga-muted) !important;
+}
+
+/* 帖子列表：标题/链接用柔和蓝灰色（默认链接蓝 #2f81f7 太刺眼） */
+#m_threads a,
+#toppedtopic a {
+    color: #a9b7c6 !important;
+}
+
+#m_threads a:hover,
+#toppedtopic a:hover {
+    color: #c9d4de !important;
+}
+
+/* 已读帖子的标题进一步降低存在感 */
+#m_threads a:visited,
+#toppedtopic a:visited {
+    color: #7d8590 !important;
 }
 
 #toppedtopic table,
