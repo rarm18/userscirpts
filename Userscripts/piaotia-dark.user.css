@@ -1,0 +1,549 @@
+// ==UserScript==
+// @name         Piaotia Dark Mode (飘天文学全站暗黑)
+// @description  飘天文学 piaotia.com 全站暗黑模式：首页 / 分类 / 书籍页 / 章节目录页 / 章节阅读页统一暗色主题。
+// @namespace    zywu
+// @author       zywu
+// @license      MIT
+// @version      1.0.0
+// @match        *://*.piaotia.com/*
+// @inject-into  auto
+// @noframes
+// ==/UserScript==
+
+/* ============================================================================
+   飘天文学 全站暗黑模式
+   覆盖三套站点样式：
+     - style.css  首页 / 分类 / 书籍介绍 / 搜索 / 用户页
+     - list.css   章节目录页 (/html/<类>/<书>/)
+     - page.css   章节阅读页 (/html/<类>/<书>/<章>.html)
+   配色统一为 GitHub-Dark 系，阅读体验舒适、不刺眼。
+   ============================================================================ */
+
+:root {
+    color-scheme: dark;
+    --pt-bg: #101418;
+    --pt-surface: #1a212b;
+    --pt-surface-2: #222b37;
+    --pt-surface-3: #2a3442;
+    --pt-border: #2f3a48;
+    --pt-border-soft: #26303c;
+    --pt-text: #c6cfd9;
+    --pt-text-strong: #e8eef5;
+    --pt-muted: #8a94a3;
+    --pt-link: #7db4f0;
+    --pt-link-hover: #a8cdf7;
+    --pt-accent: #e2a63c;
+    --pt-red: #e5534b;
+    --pt-input: #0d1117;
+}
+
+/* ---------------- 基础 ---------------- */
+
+html,
+body {
+    background: var(--pt-bg) !important;
+    color: var(--pt-text) !important;
+    color-scheme: dark !important;
+}
+
+body {
+    background-image: none !important;
+}
+
+a {
+    color: var(--pt-link) !important;
+}
+
+a:hover {
+    color: var(--pt-link-hover) !important;
+}
+
+/* 页面内联颜色覆盖：深色内联色统一提亮 */
+a[style*="COLOR"],
+a[style*="color"] {
+    color: var(--pt-link) !important;
+}
+
+[style*="color: #333"],
+[style*="color:#333"] {
+    color: var(--pt-text) !important;
+}
+
+[style*="da1a27"] {
+    color: var(--pt-red) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--pt-red) !important;
+}
+
+hr {
+    border-color: var(--pt-border) !important;
+}
+
+img {
+    filter: brightness(0.9) contrast(1.03);
+}
+
+/* ---------------- 主站 style.css ---------------- */
+
+/* 顶栏 / 布局 */
+.m_top,
+.m_menu {
+    background-image: none !important;
+    background-color: var(--pt-surface) !important;
+}
+
+/* 板块 */
+.block {
+    border-color: var(--pt-border) !important;
+    background: var(--pt-surface) !important;
+}
+
+.blocktitle {
+    background: var(--pt-surface-2) !important;
+    border-color: var(--pt-border-soft) !important;
+    color: var(--pt-text-strong) !important;
+}
+
+.blocktitle .txt {
+    color: var(--pt-accent) !important;
+    background-image: none !important;
+}
+
+.blocktitle .txtr {
+    background-image: none !important;
+}
+
+.blockcontent {
+    border-color: var(--pt-border-soft) !important;
+    background: var(--pt-surface) !important;
+}
+
+#left .blocktitle,
+#right .blocktitle {
+    background-image: none !important;
+    background-color: var(--pt-surface-2) !important;
+}
+
+#left .blockcontent,
+#right .blockcontent {
+    background: var(--pt-surface) !important;
+}
+
+.blocknote {
+    background: var(--pt-surface-2) !important;
+}
+
+/* 列表 */
+.ultop li {
+    border-bottom-color: var(--pt-border-soft) !important;
+    color: var(--pt-link) !important;
+}
+
+.ultop li a {
+    color: var(--pt-red) !important;
+}
+
+.ulitem li a,
+.more a {
+    color: var(--pt-text) !important;
+}
+
+.hottext,
+a.hottext {
+    color: var(--pt-red) !important;
+}
+
+.poptext,
+a.poptext {
+    color: var(--pt-red) !important;
+}
+
+.notetext,
+a.notetext {
+    color: var(--pt-link) !important;
+}
+
+/* 表格 */
+table.grid td {
+    background: var(--pt-surface) !important;
+    border-color: var(--pt-border) !important;
+}
+
+table.grid th,
+.head {
+    background: var(--pt-surface-2) !important;
+    color: var(--pt-text-strong) !important;
+    border-color: var(--pt-border) !important;
+}
+
+table.grid caption,
+.gridtop {
+    background: var(--pt-surface-2) !important;
+    color: var(--pt-text-strong) !important;
+    border-color: var(--pt-border) !important;
+}
+
+/* 内联 bgcolor 属性（友情链接等） */
+table[bgcolor],
+tr[bgcolor],
+td[bgcolor],
+th[bgcolor] {
+    background: var(--pt-surface) !important;
+}
+
+table.hide td,
+table.hide th {
+    background: transparent !important;
+}
+
+.even,
+.odd {
+    background: var(--pt-surface) !important;
+}
+
+.title {
+    background: var(--pt-surface-2) !important;
+    color: var(--pt-text-strong) !important;
+    border-color: var(--pt-border) !important;
+}
+
+.foot {
+    background: var(--pt-surface-2) !important;
+}
+
+/* 导航 */
+.nav,
+.navinner,
+.navlist,
+.nav li,
+.subnav,
+.subnav p,
+.subnav p span,
+.subnav p.pointer {
+    background-image: none !important;
+}
+
+.nav,
+.navlist {
+    background-color: var(--pt-surface-2) !important;
+}
+
+.nav a:link,
+.nav a:visited,
+.nav a.current,
+.nav a:hover,
+.nav a:active {
+    color: var(--pt-text-strong) !important;
+}
+
+.subnav {
+    background-color: var(--pt-surface) !important;
+}
+
+.subnav,
+.subnav a:link,
+.subnav a:visited,
+.subnav a:hover,
+.subnav a:active {
+    color: var(--pt-link) !important;
+}
+
+/* 强调数字 */
+.shi,
+.fen {
+    color: var(--pt-accent) !important;
+}
+
+/* 表单 */
+input.text1,
+.text,
+.textarea,
+.select,
+.pagelink input,
+input[type="text"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+    background: var(--pt-input) !important;
+    color: var(--pt-text) !important;
+    border-color: var(--pt-border) !important;
+}
+
+.button,
+input[type="submit"],
+a.btnlink {
+    background: var(--pt-surface-2) !important;
+    color: var(--pt-text-strong) !important;
+    border-color: var(--pt-border) !important;
+}
+
+a.btnlink:hover {
+    background: var(--pt-surface-3) !important;
+}
+
+/* 页脚 */
+.m_foot {
+    border-color: var(--pt-border-soft) !important;
+    color: var(--pt-muted) !important;
+}
+
+.m_foot a {
+    color: var(--pt-link) !important;
+}
+
+/* 侧栏书籍卡片 */
+.sidebar-item-header,
+.blue .sidebar-item-header {
+    background-color: var(--pt-surface-2) !important;
+    background-image: none !important;
+    color: var(--pt-text-strong) !important;
+    border-color: var(--pt-border) !important;
+}
+
+.blue .sidebar-item-body {
+    background: var(--pt-surface) !important;
+    border-color: var(--pt-border) !important;
+}
+
+.s_item {
+    border-top-color: var(--pt-border-soft) !important;
+}
+
+.sidebar-item .hover {
+    background: var(--pt-surface-2) !important;
+}
+
+.s_item .info {
+    color: var(--pt-muted) !important;
+}
+
+.s_item .info dt a {
+    color: var(--pt-link) !important;
+}
+
+.sidebar-item .hd h3 {
+    color: var(--pt-text-strong) !important;
+}
+
+.sidebar-item-header a {
+    color: var(--pt-muted) !important;
+}
+
+/* 分页 / 标签页 */
+.pagelink {
+    background: var(--pt-surface-2) !important;
+    border-color: var(--pt-border) !important;
+}
+
+.pagelink a:hover {
+    background: var(--pt-surface-3) !important;
+}
+
+.pagelink strong {
+    color: var(--pt-accent) !important;
+    background: var(--pt-surface-3) !important;
+}
+
+.tablist li a {
+    background: var(--pt-surface-2) !important;
+    color: var(--pt-text) !important;
+    border-color: var(--pt-border) !important;
+}
+
+.tablist li a.selected {
+    background: var(--pt-surface-3) !important;
+}
+
+.tabcontent,
+.textbox,
+.divbox {
+    border-color: var(--pt-border) !important;
+}
+
+.jieqiQuote,
+.jieqiCode,
+.jieqiNote {
+    background-color: var(--pt-surface-2) !important;
+    color: var(--pt-text) !important;
+    border-color: var(--pt-border) !important;
+}
+
+.popbox,
+#tips {
+    background: var(--pt-surface-2) !important;
+    border-color: var(--pt-border) !important;
+}
+
+/* ---------------- 章节目录页 list.css ---------------- */
+
+.mainbody,
+.bottom,
+.tuijian,
+.abcdef,
+.shumeng_pawinfo {
+    border-color: var(--pt-border) !important;
+    background: var(--pt-surface) !important;
+    color: var(--pt-text) !important;
+}
+
+.list {
+    background: var(--pt-surface-2) !important;
+    border-color: var(--pt-border) !important;
+    color: var(--pt-text-strong) !important;
+}
+
+.list ul li,
+.centent ul li {
+    background: var(--pt-surface) !important;
+    border-color: var(--pt-border) !important;
+}
+
+.list ul li a,
+.centent ul li a {
+    color: var(--pt-text) !important;
+}
+
+.centent ul li a:hover {
+    color: var(--pt-text-strong) !important;
+}
+
+.centent ul li a:visited {
+    color: var(--pt-link) !important;
+}
+
+#tl {
+    color: var(--pt-muted) !important;
+}
+
+#content,
+#title {
+    color: var(--pt-text) !important;
+}
+
+#title {
+    color: var(--pt-text-strong) !important;
+}
+
+/* ---------------- 章节阅读页 page.css ---------------- */
+
+#main {
+    background: var(--pt-surface) !important;
+}
+
+/* 站点自带的背景色切换（colors1~colors8）统一压成暗色 */
+#main.colors1, #main.colors2, #main.colors3, #main.colors4,
+#main.colors5, #main.colors6, #main.colors7, #main.colors8 {
+    background: var(--pt-surface) !important;
+}
+
+#guild a {
+    background-image: none !important;
+    background-color: var(--pt-surface-2) !important;
+    color: var(--pt-text) !important;
+    border: 1px solid var(--pt-border);
+    border-radius: 4px;
+    line-height: 23px !important;
+}
+
+#shop {
+    background: var(--pt-surface-2) !important;
+    border-color: var(--pt-border-soft) !important;
+    color: var(--pt-text-strong) !important;
+}
+
+#shop .status,
+#shop .status a {
+    color: var(--pt-muted) !important;
+}
+
+#content h1,
+#content h1 a,
+#content #tipinfo,
+#content #tipinfo a {
+    color: var(--pt-red) !important;
+}
+
+.toplink a {
+    color: var(--pt-link) !important;
+}
+
+.bottomlink a {
+    color: var(--pt-muted) !important;
+}
+
+/* 章节列表（page.css 的 #BookText 形态） */
+#main #content #BookText ul {
+    border-color: var(--pt-border) !important;
+}
+
+#main #content #BookText ul li {
+    border-color: var(--pt-border) !important;
+}
+
+#main #content #BookText #NclassTitle,
+#main #content #BookText #NclassTitleVip {
+    background-color: var(--pt-surface-2) !important;
+    border-color: var(--pt-border) !important;
+}
+
+#main #tips,
+#main #tags,
+#main #feit,
+#main #feit2 {
+    color: var(--pt-muted) !important;
+}
+
+#main #feit ul li a,
+#main #feit2 ul li a {
+    color: var(--pt-text) !important;
+    background: var(--pt-surface-2) !important;
+}
+
+#copyRight {
+    color: var(--pt-muted) !important;
+}
+
+/* 登录提示浮层 */
+.engine_from .hintTitle {
+    background-image: none !important;
+    background-color: var(--pt-surface-2) !important;
+}
+
+.engine_from .hintBody {
+    background: var(--pt-surface-2) !important;
+    border-color: var(--pt-border) !important;
+}
+
+.engine_from .cxt-input .cxt-input-cxt {
+    background: var(--pt-surface-2) !important;
+    color: var(--pt-text) !important;
+    border-color: var(--pt-border) !important;
+}
+
+.engine_from .cxt-input .cxt-input-cxt .cur {
+    background: var(--pt-surface-3) !important;
+}
+
+/* ---------------- 滚动条 ---------------- */
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--pt-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--pt-surface-3);
+    border-radius: 6px;
+    border: 2px solid var(--pt-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--pt-border);
+}
