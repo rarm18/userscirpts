@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Piaotia Dark Mode (飘天文学全站暗黑)
-// @description  飘天文学 piaotia.com 全站暗黑模式：首页 / 分类 / 书籍页 / 章节目录页 / 章节阅读页统一暗色主题。
+// @description  飘天文学 piaotia.com 全站暗黑模式：首页/分类/书籍页/章节目录页/章节阅读页统一暗色主题；章节阅读页附带沉浸式阅读排版。
 // @namespace    zywu
 // @author       zywu
 // @license      MIT
-// @version      1.0.0
+// @version      1.1.0
 // @match        *://*.piaotia.com/*
 // @inject-into  auto
 // @noframes
@@ -17,6 +17,7 @@
      - list.css   章节目录页 (/html/<类>/<书>/)
      - page.css   章节阅读页 (/html/<类>/<书>/<章>.html)
    配色统一为 GitHub-Dark 系，阅读体验舒适、不刺眼。
+   章节阅读页另附「阅读排版」优化（见文件末尾“章节阅读模式”一节）。
    ============================================================================ */
 
 :root {
@@ -525,6 +526,91 @@ a.btnlink:hover {
 
 .engine_from .cxt-input .cxt-input-cxt .cur {
     background: var(--pt-surface-3) !important;
+}
+
+/* ---------------- 章节阅读模式（阅读排版优化） ---------------- */
+/* 仅作用于章节正文页：只有这类页面含 .bottomlink（上一章/下一章导航），
+   目录页 / 首页 / 书籍页均不含，天然不受影响。
+   说明：纯 CSS 无法把站点扁平的正文（文本节点 + <br>）重排为 <p> 段落，
+   本模式聚焦沉浸式排版：更宽正文栏、字号行距、两端对齐、隐藏广告与杂项。 */
+
+body:has(.bottomlink) {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+}
+
+body:has(.bottomlink) #main {
+    max-width: 60rem !important;
+    width: auto !important;
+    margin: 0 auto !important;
+    background: transparent !important;
+    border: 0 !important;
+}
+
+/* 隐藏设置栏 / 面包屑 / 推荐 / 广告等杂项 */
+body:has(.bottomlink) #guild,
+body:has(.bottomlink) #shop,
+body:has(.bottomlink) #feit2,
+body:has(.bottomlink) #Commenddiv,
+body:has(.bottomlink) center,
+body:has(.bottomlink) .share,
+body:has(.bottomlink) ins,
+body:has(.bottomlink) iframe {
+    display: none !important;
+}
+
+/* 正文排版 */
+body:has(.bottomlink) #content {
+    width: auto !important;
+    padding: 1rem 1.4rem 3rem !important;
+    font-size: 19px !important;
+    line-height: 1.95 !important;
+    color: var(--pt-text) !important;
+    text-align: justify;
+    word-break: break-word;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+                 "Microsoft YaHei", "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif !important;
+}
+
+body:has(.bottomlink) #content h1 {
+    font-size: 1.35em !important;
+    line-height: 1.5 !important;
+    color: var(--pt-text-strong) !important;
+    margin: 1.2rem 0 0.9rem !important;
+    text-align: center;
+}
+
+body:has(.bottomlink) #content h1 a {
+    color: var(--pt-text-strong) !important;
+}
+
+/* 翻页链接改为圆角胶囊按钮 */
+body:has(.bottomlink) .toplink,
+body:has(.bottomlink) .bottomlink {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin: 1rem 0 !important;
+    padding: 0 !important;
+}
+
+body:has(.bottomlink) .toplink a,
+body:has(.bottomlink) .bottomlink a {
+    display: inline-block !important;
+    padding: 0.35em 1.1em !important;
+    border-radius: 999px !important;
+    background: var(--pt-surface) !important;
+    border: 1px solid var(--pt-border) !important;
+    color: var(--pt-link) !important;
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+    text-decoration: none !important;
+}
+
+body:has(.bottomlink) .bottomlink span {
+    display: none !important;
 }
 
 /* ---------------- 滚动条 ---------------- */
