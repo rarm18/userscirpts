@@ -4,7 +4,7 @@
 // @namespace    zywu
 // @author       zywu
 // @license      MIT
-// @version      1.1.0
+// @version      1.2.0
 // @match        *://*.piaotia.com/*
 // @inject-into  auto
 // @noframes
@@ -565,7 +565,7 @@ body:has(.bottomlink) #content {
     width: auto !important;
     padding: 1rem 1.4rem 3rem !important;
     font-size: 19px !important;
-    line-height: 1.95 !important;
+    line-height: 1.65 !important; /* 1.95→1.65：行距缩短，文字更紧密 */
     color: var(--pt-text) !important;
     text-align: justify;
     word-break: break-word;
